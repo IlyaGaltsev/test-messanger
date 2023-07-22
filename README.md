@@ -1,10 +1,20 @@
-# Multicontainer application
+### Развертывание на машине
 
-Codeching - video 8 - Dockerizing a React application with Node.js Postgres and NginX - dev and prod - step by step - PART 1
+создать файлы .development.end и  .production.env если их нет в репозитории, образец можно скопировать из .example.env 
 
+далее перейти в терминал 
 
-It contains React client, Node.js backend, PostgreSQL and Nginx
+docker-compose build
 
-You can run it in development mode: docker-compose up --build
-It contains Dockerfiles for client, server which you should push to your docker hub to be able
-to pull them down when in next tutorial we will use them in Kubernetes.
+docker-compose up -d
+
+### Задачи на доработку
+[ ] - Шифровать пароль
+[ ] - Валидацию адекватную, библиотечную сделай
+[ ] - Может структуру проекта поменять на entities , controllers , modules ... мб так удобнее будет указать путь до модулей в app.module
+[ ] - ws добавь чтобы в realtime данные обновлялись
+[ ] -
+[ ] -
+[ ] -
+[ ] -
+[ ] -
