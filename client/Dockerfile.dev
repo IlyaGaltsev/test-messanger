@@ -1,9 +1,0 @@
-FROM node:14.14.0-alpine
-WORKDIR /app
-COPY ./package.json ./
-RUN npm i
-COPY . .
-# COPY ./package.json /app
-COPY ./src /app/src
-# COPY ./src/components /app/src/components
-CMD ["npm", "start"]
