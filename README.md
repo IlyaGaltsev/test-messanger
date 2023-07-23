@@ -1,6 +1,6 @@
 ### Развертывание на машине
 
-создайте файлы .development.end и  .production.env (если их нет в корне), образец можно скопировать из .example.env 
+создайте файл .env, образец можно скопировать из .env.example 
 
 далее перейти в терминал 
 
@@ -17,7 +17,7 @@ npm rebuild bcrypt --update-binary
 [ ] - Валидацию адекватную, библиотечную сделай
 [ ] - Может структуру проекта поменять на entities , controllers , modules ... мб так удобнее будет указать путь до модулей в app.module
 [ ] - ws добавь чтобы в realtime данные обновлялись
-[ ] - добавь в sgitignore .development.env и .production.env файлы 
+[x] - избавься от .development.env и .production.env
 [ ] - в идеале пароль не должен отдаваться на фронт
 [ ] -
 [ ] -
