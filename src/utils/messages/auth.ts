@@ -4,5 +4,7 @@ export const authMessages = {
   isBusyEmail: 'Данный логин уже используется',
   isEmptyEmail: 'Поле "логин" не заполнено',
   isEmptyPassword: 'Поле "пароль" не заполнено',
-  isIncorrectPassword: 'Неверный пароль'
-};
+  isIncorrectPassword: 'Неверный пароль',
+  isNotAccessToken: 'access_token не был передан',
+  faliedDecodeAccessToken: 'access_token не был расшифрован',
+}
