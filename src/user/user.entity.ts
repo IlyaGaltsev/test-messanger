@@ -1,23 +1,24 @@
-import { Base } from 'src/utils/base';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { MessageEntity } from 'src/message/message.entity'
+import { Base } from 'src/utils/base'
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm'
 
 @Entity('User')
 export class UserEntity extends Base {
   @Column({ unique: true })
-  email: string;
+  email: string
 
   @Column()
-  password: string;
+  password: string
 
   @Column({ default: '' })
-  name: string;
+  name: string
 
   @Column({ default: '/uploads/default-avatar.png', name: 'avatar_path' })
-  avatarPath: string;
+  avatarPath: string
 
   @Column({ default: '', type: 'text' })
-  address: string;
+  address: string
 
-//   @OneToMany(() => UserEntity, (user: any) => user.id, { cascade: true })
-//   contacts: UserEntity[];
+  @OneToMany(() => MessageEntity, message => message.user, { onDelete: 'CASCADE' })
+  messages: MessageEntity[]
 }

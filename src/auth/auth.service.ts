@@ -1,20 +1,22 @@
-import { CreateUserDto } from './../dto/create-user.dto'
 import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { UserService } from 'src/user/user.service'
-import { authMessages } from 'src/utils/messages/auth'
-import { LoginDto } from 'src/dto/login.dto'
 import * as bcrypt from 'bcrypt'
+
+import { authMessages } from 'src/utils/messages/auth'
+import { UserService } from 'src/user/user.service'
+
+import { CreateUserDto } from './../dto/create-user.dto'
+import { LoginDto } from 'src/dto/login.dto'
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UserService, private jwtService: JwtService) {}
+  constructor(private userService: UserService, private jwtService: JwtService) {}
 
   async login(dto: LoginDto) {
     if (!dto.email) throw new UnprocessableEntityException(authMessages.isEmptyEmail)
     if (!dto.password) throw new UnprocessableEntityException(authMessages.isEmptyPassword)
     
-    const user = await this.usersService.findByEmail(dto.email)
+    const user = await this.userService.findByEmail(dto.email)
     if (!user) {
       throw new UnprocessableEntityException(authMessages.isUserNotFound)
     }
@@ -39,7 +41,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10)
     const createUserDto: CreateUserDto = { ...dto, password: hashedPassword }
-    return await this.usersService.createUser(createUserDto)
+    return await this.userService.createUser(createUserDto)
   }
 
   async generateToken(payload: any) {

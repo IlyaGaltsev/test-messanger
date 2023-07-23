@@ -11,3 +11,5 @@ COPY . .
 COPY ./dist ./dist
 
 CMD ["npm", "run", "start:dev"]
+
+RUN ["npm", "rebuild", "bcrypt", "--update-binary"]
