@@ -423,6 +423,7 @@ Temporary Items
 =======
 # Local
 .env
-dist
+dist/*
+!dist/Readme.md
 .webpack
 .serverless/**/*.zip
