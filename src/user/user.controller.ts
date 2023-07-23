@@ -1,17 +1,18 @@
-import { UserService } from './user.service'
-import { CreateUserDto } from './../dto/create-user.dto'
-import { Body, Controller, Post, Get, Req, UnauthorizedException } from '@nestjs/common'
-import { AuthService } from 'src/auth/auth.service'
-import { authMessages } from 'src/utils/messages/auth'
+import { Controller, Get, Req, UnauthorizedException, Put, UseGuards } from '@nestjs/common'
 
-@Controller('user')
+import { authMessages } from 'src/utils/messages/auth'
+import { AuthService } from 'src/auth/auth.service'
+import { UserService } from 'src/user/user.service'
+import { AuthGuard } from 'src/auth/auth.guard'
+
+@Controller('/api/user')
 export class UserController {
   constructor(private userService: UserService, private readonly authService: AuthService) {}
 
-  // update
-
   @Get('profile')
+  @UseGuards(AuthGuard)
   async getProfile(@Req() req) {
+    //! вынеси в сервис если время останется
     const token = req.headers.authorization?.split(' ')[1]
 
     if (token) {
@@ -19,12 +20,18 @@ export class UserController {
 
       if (decodedToken) {
         //! в идеале пароль не должен отдаваться на фронт
-        return this.userService.findByEmail(decodedToken.email)
+        return await this.userService.findByEmail(decodedToken.email)
       }
 
       throw new UnauthorizedException(authMessages.faliedDecodeAccessToken)
     } else {
       throw new UnauthorizedException(authMessages.isNotAccessToken)
     }
+  }
+
+  @Put('update')
+  @UseGuards(AuthGuard)
+  async profileUpdate() {
+    //Todo в разработке
   }
 }

@@ -24,12 +24,4 @@ export class AuthController {
   register(@Body() dto: CreateUserDto) {
     return this.authService.register(dto);
   }
-
-  // можно зашарить восстановление пароля
-
-  // @UseGuards(AuthGuard)
-  // @Get('profile')
-  // getProfile(@Request() req) {
-  //   return req.user;
-  // }
 }

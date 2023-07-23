@@ -12,5 +12,5 @@ export abstract class Base {
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAy: Date;
+  updatedAt: Date;
 }
