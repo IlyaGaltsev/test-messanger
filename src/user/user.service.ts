@@ -2,10 +2,12 @@ import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/c
 import { InjectRepository } from '@nestjs/typeorm'
 import { Like, Repository } from 'typeorm'
 
-import { CreateUserDto } from './../dto/create-user.dto'
 import { errorMessages } from 'src/utils/messages/errorMessages'
 import { AuthService } from 'src/auth/auth.service'
 import { UserEntity } from './user.entity'
+
+import { CreateUserDto } from './../dto/create-user.dto'
+import { UpdateUserDto } from './../dto/update-user.dto'
 
 @Injectable()
 export class UserService {
@@ -17,26 +19,50 @@ export class UserService {
     private userRepository: Repository<UserEntity>
   ) {}
 
-  async view(req):Promise<UserEntity> {
-    const token = this.authService.getTokenFromReq(req)
-
-    if (token) {
-      const decodedToken = await this.authService.decodeToken(token)
-
-      if (decodedToken) {
-        //! в идеале пароль не должен отдаваться на фронт
-        return await this.findById(decodedToken.sub)
-      }
-
-      throw new UnauthorizedException(errorMessages.faliedDecodeAccessToken)
-    } else {
-      throw new UnauthorizedException(errorMessages.isNotAccessToken)
-    }
+  async view(authorization: string): Promise<UserEntity> {
+    return await this.decodeTokenByFindUser(authorization)
   }
 
   async create(dto: CreateUserDto): Promise<UserEntity> {
     const user = this.userRepository.create(dto)
     return await this.userRepository.save(user)
+  }
+
+  async update(authorization: string, dto: UpdateUserDto): Promise<UserEntity> {
+    const user = await this.decodeTokenByFindUser(authorization)
+
+    if (dto.name) {
+      user.name = dto.name
+    }
+
+    if (dto.avatarPath) {
+      user.avatarPath = dto.avatarPath
+    }
+
+    if (dto.address) {
+      user.address = dto.address
+    }
+
+    return await this.userRepository.save(user)
+  }
+
+  async decodeTokenByFindUser(authorization: string): Promise<UserEntity> {
+    const token = this.authService.getTokenFromAuthorization(authorization)
+    if (!token) {
+      throw new UnauthorizedException(errorMessages.isNotAccessToken)
+    }
+
+    const decodedToken = await this.authService.decodeToken(token)
+    if (!decodedToken) {
+      throw new UnauthorizedException(errorMessages.faliedDecodeAccessToken)
+    }
+
+    const user = await this.findById(decodedToken.sub)
+    if (!user) {
+      throw new UnauthorizedException(errorMessages.isUserNotFoundInBase)
+    }
+
+    return await user
   }
 
   async findByEmail(email: string): Promise<UserEntity | undefined> {
