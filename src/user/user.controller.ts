@@ -1,6 +1,13 @@
-import { Controller, Get, Req, UnauthorizedException, Put, UseGuards } from '@nestjs/common'
+import { UpdateUserDto } from './../dto/update-user.dto'
+import {
+  Controller,
+  UseGuards,
+  Get,
+  Put,
+  Body,
+  Headers
+} from '@nestjs/common'
 
-import { errorMessages } from 'src/utils/messages/errorMessages'
 import { AuthService } from 'src/auth/auth.service'
 import { UserService } from 'src/user/user.service'
 import { AuthGuard } from 'src/auth/auth.guard'
@@ -11,13 +18,13 @@ export class UserController {
 
   @Get('view')
   @UseGuards(AuthGuard)
-  async userView(@Req() req) {
-    return await this.userService.view(req)
+  async userView(@Headers() {authorization}) {
+    return await this.userService.view(authorization)
   }
 
   @Put('update')
   @UseGuards(AuthGuard)
-  async profileUpdate() {
-    //Todo в разработке
+  async userUpdate(@Headers() {authorization}, @Body() dto: UpdateUserDto) {
+    return await this.userService.update(authorization, dto)
   }
 }

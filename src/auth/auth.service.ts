@@ -60,7 +60,7 @@ export class AuthService {
     return decodedToken ?? ''
   }
 
-  getTokenFromReq(req): string {
-    return req.headers.authorization?.split(' ')[1]
+  getTokenFromAuthorization(authorization: string): string {
+    return authorization?.split(' ')[1]
   }
 }
