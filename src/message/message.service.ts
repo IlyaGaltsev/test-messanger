@@ -6,13 +6,16 @@ import { MessageEntity } from './message.entity'
 import { CreateMessageDto } from 'src/dto/create-message.dto'
 import { UserEntity } from 'src/user/user.entity'
 import { errorMessages } from 'src/utils/messages/errorMessages'
+import { MessageGateway } from './message.gateway'
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(MessageEntity)
     private readonly messageRepository: Repository<MessageEntity>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    // private readonly messageGateway: MessageGateway 
+
   ) {}
 
   async createMessage(dto: CreateMessageDto) {
@@ -26,6 +29,8 @@ export class MessageService {
       message: dto.message,
       user: currentUser
     })
+
+    // this.messageGateway.handleNewMessage();
 
     return await this.messageRepository.save(message)
   }
