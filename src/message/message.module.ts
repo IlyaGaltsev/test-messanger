@@ -7,11 +7,12 @@ import { Repository } from 'typeorm'
 
 import { MessageController } from './message.controller'
 import { MessageEntity } from './message.entity'
+import { MessageGateway } from './message.gateway'
 import { MessageService } from './message.service'
 
 @Module({
   imports: [TypeOrmModule.forFeature([MessageEntity, UserEntity])],
-  providers: [MessageService, Repository<MessageEntity>, AuthService, UserService],
+  providers: [MessageService, Repository<MessageEntity>, AuthService, UserService, MessageGateway],
   controllers: [MessageController]
 })
 export class MessageModule {}

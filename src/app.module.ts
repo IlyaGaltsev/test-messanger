@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Module } from '@nestjs/common'
 import { Connection } from 'typeorm'
 
+import { GatewayModule } from './gateway/gateway.module';
 import { AuthModule } from './auth/auth.module'
 import { AuthController } from './auth/auth.controller'
 import { UserModule } from 'src/user/user.module'
@@ -11,6 +12,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 import { MessageModule } from './message/message.module'
+import { MessageGateway } from './message/message.gateway';
 
 @Module({
   controllers: [AppController, AuthController],
@@ -30,7 +32,8 @@ import { MessageModule } from './message/message.module'
     }),
     AuthModule,
     UserModule,
-    MessageModule
+    MessageModule,
+    GatewayModule
   ]
 })
 export class AppModule {
