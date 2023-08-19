@@ -1,6 +1,7 @@
 import { MessageEntity } from 'src/message/message.entity'
+import { RoomEntity } from 'src/room/room.entity'
 import { Base } from 'src/utils/base'
-import { Column, Entity, JoinColumn, OneToMany } from 'typeorm'
+import { Column, Entity, JoinColumn,JoinTable, ManyToMany, OneToMany } from 'typeorm'
 
 @Entity('User')
 export class UserEntity extends Base {
@@ -21,4 +22,7 @@ export class UserEntity extends Base {
 
   @OneToMany(() => MessageEntity, message => message.user, { onDelete: 'CASCADE' })
   messages: MessageEntity[]
+
+  @OneToMany(() => RoomEntity, room => room.owner)
+  rooms: RoomEntity[];
 }

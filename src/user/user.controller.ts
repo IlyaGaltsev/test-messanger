@@ -27,4 +27,16 @@ export class UserController {
   async userUpdate(@Headers() {authorization}, @Body() dto: UpdateUserDto) {
     return await this.userService.update(authorization, dto)
   }
+
+  @Get('all')
+  @UseGuards(AuthGuard)
+  async fetchUsersAll() {
+    return await this.userService.getAllUsers()
+  }
+
+  @Get('everyone-but-me')
+  @UseGuards(AuthGuard)
+  async fetchEveryoneButMe(@Headers() {authorization}) {
+    return await this.userService.fetchEveryoneButMe(authorization)
+  }
 }

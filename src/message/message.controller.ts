@@ -1,3 +1,4 @@
+import { FetchMessagesDto } from './../dto/fetch-messages.dto';
 import { CreateMessageDto } from './../dto/create-message.dto'
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common'
 import { MessageService } from './message.service'
@@ -15,8 +16,8 @@ export class MessageController {
 
   @Get('all')
   @UseGuards(AuthGuard)
-  async getAllMessages() {
-    return await this.messageService.getAllMessages()
+  async fetchMessagesInRoom(@Body() dto:FetchMessagesDto) {
+    return await this.messageService.fetchMessagesByRoomId(dto)
   }
 
   @Delete('delete/:id')
