@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Like, Repository } from 'typeorm'
+import { Like, Not, Repository } from 'typeorm'
 
 import { errorMessages } from 'src/utils/messages/errorMessages'
 import { AuthService } from 'src/auth/auth.service'
@@ -79,6 +79,22 @@ export class UserService {
 
   async getAllUsers() {
     const users = await this.userRepository.find()
+    return users
+  }
+
+  async fetchEveryoneButMe(authorization: string) {
+    const user = await this.decodeTokenByFindUser(authorization)
+
+    if (!user) {
+      throw new UnauthorizedException(errorMessages.isUserNotFoundInBase)
+    }
+    
+    const users = await this.userRepository.find({
+      where: {
+        id: Not(user.id)
+      }
+    })
+
     return users
   }
 }

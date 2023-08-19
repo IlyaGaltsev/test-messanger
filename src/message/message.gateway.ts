@@ -1,26 +1,31 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
-import { Server } from 'socket.io';
+import { FetchMessagesDto } from './../dto/fetch-messages.dto';
+import {
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer
+} from '@nestjs/websockets'
+import { Server } from 'socket.io'
 import { CreateMessageDto } from 'src/dto/create-message.dto'
 import { MessageService } from './message.service'
 
-@WebSocketGateway({ cors: true})
+@WebSocketGateway({ cors: true })
 export class MessageGateway {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(private messageService: MessageService) {}
 
   @WebSocketServer()
-  server: Server;
+  server: Server
 
   @SubscribeMessage('createMessage')
   async createMessage(@MessageBody() dto: CreateMessageDto) {
     await this.messageService.createMessage(dto)
 
-     this.handleNewMessage();
-
+    this.handleNewMessage(dto.roomId)
   }
 
-  @SubscribeMessage('allMessage')
-  getAllMessages() {
-    return this.messageService.getAllMessages()
+  @SubscribeMessage('fecthMessagesInRoom')
+  async getAllMessages(@MessageBody() dto:FetchMessagesDto) {
+    return await this.messageService.fetchMessagesByRoomId(dto)
   }
 
   @SubscribeMessage('deleteMessage')
@@ -28,8 +33,8 @@ export class MessageGateway {
     return this.messageService.deleteMessage(id)
   }
 
-  async handleNewMessage( ) {
-    const messages = await this.messageService.getAllMessages(); // Get all messages including the new one
-    this.server.emit('messages', messages); //
+  async handleNewMessage(roomId: number) {
+    const messages = await this.messageService.fetchMessagesByRoomId({roomId})
+    this.server.emit('messages', messages)
   }
 }
